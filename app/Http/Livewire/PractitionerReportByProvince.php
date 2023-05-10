@@ -33,28 +33,47 @@ class PractitionerReportByProvince extends Component
     {
         $this->resetPage();
     }
+
     public function render()
     {
-        $practitioners = collect([]);
-
         $practitioners = Practitioner::with('lastRegistration')
-            ->filter($this->practitionerType, $this->province, $this->city)
-            ->whereHas('lastRegistration', function ($query) {
-                $query->withActiveRenewal();
+            ->when($this->practitionerType, function ($query) {
+                $query->whereHas('lastRegistration', function ($query) {
+                    $query->where('practitionerType_id', $this->practitionerType)
+                        ->withActiveRenewal();
+                })->with(['lastRegistration' => function ($query) {
+                    $query->with('practitionerType');
+                }]);
             })
-            ->orderBy('id', $this->orderAsc ? 'asc' : 'desc')
+            ->when($this->province, function ($query) {
+                $query->whereHas('address', function ($query) {
+                    $query->where('province', $this->province);
+                });
+            })
+            ->when($this->city, function ($query) {
+                $query->whereHas('address', function ($query) {
+                    $query->where('city_id', $this->city);
+                });
+            })
+            ->when($this->orderBy && $this->orderAsc, function ($query) {
+                $query->orderBy($this->orderBy);
+            }, function ($query) {
+                $query->orderByDesc($this->orderBy);
+            })
             ->paginate($this->perPage);
 
+        $resultsCount = $practitioners->total();
+        $paginationLinks = $practitioners->links();
 
-
-
-        return view('livewire.practitioner-report-by-province',
-            [
-                'practitioners' => $practitioners,
-                'practitionerTypes' => PractitionerType::all(),
-                'provinces' => Province::all(),
-                'cities' => City::all(),
-            ]
-        );
+        return view('livewire.practitioner-report-by-province', [
+            'practitioners' => $practitioners->isEmpty() ? null : $practitioners,
+            'practitionerTypes' => PractitionerType::all(),
+            'provinces' => Province::all(),
+            'cities' => City::all(),
+            'resultsCount' => $resultsCount,
+            'paginationLinks' => $paginationLinks,
+        ]);
     }
+
+
 }

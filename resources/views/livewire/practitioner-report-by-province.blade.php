@@ -7,7 +7,7 @@
                     <label for="profession" class="col-form-label">Profession: {{$practitionerType}}</label>
                     <select wire:model="practitionerType" id="practitionerType" class="form-select form-control"
                             name="practitionerType">
-                        <option value="">-- Select profession --</option>
+                        <option>-- Select profession --</option>
                         @foreach($practitionerTypes as $practitionerType)
                             <option
                                 value="{{$practitionerType->id}}">{{$practitionerType->name}}</option>
@@ -16,9 +16,9 @@
                     </select>
                 </div>
                 <div class="flex-row col-md-3">
-                    <label for="province" class="col-form-label">Province:</label>
+                    <label for="province" class="col-form-label">Province: {{$province}}</label>
                     <select wire:model="province" id="province" class="form-select form-control" name="province">
-                        <option value="">-- Select province --</option>
+                        <option>-- Select province --</option>
                         @foreach($provinces as $province)
                             <option value="{{$province->name}}">{{$province->name}}</option>
                         @endforeach
@@ -28,7 +28,7 @@
                 <div class="flex-row col-md-3">
                     <label for="city" class="col-form-label">City:</label>
                     <select wire:model="city" id="city" class="form-select form-control" name="city">
-                        <option value="">-- Select city --</option>
+                        <option>-- Select city --</option>
                         @foreach($cities as $city)
                             <option value="{{$city->id}}">{{$city->name}}</option>
                         @endforeach
@@ -60,53 +60,56 @@
             </thead>
             <tbody>
 
-            @foreach($practitioners as $practitioner)
-                <tr>
-                    <td>{{ $practitioner->firstName }} {{ $practitioner->lastName }}</td>
-                    <td>
-                        @if($practitioner->lastRegistration)
-                            {{ $practitioner->lastRegistration->practitionerType->name }}
-                        @endif
-                    </td>
-                    <td>
-                        @if($practitioner->address)
-                            @if($practitioner->address->province)
-                                {{ $practitioner->address->province }}
+            @if ($practitioners)
+                @foreach($practitioners as $practitioner)
+                    <tr>
+                        <td>{{ $practitioner->firstName }} {{ $practitioner->lastName }}</td>
+                        <td>
+                            @if($practitioner->lastRegistration)
+                                {{ $practitioner->lastRegistration->practitionerType->name }}
                             @endif
-                        @endif
-                    </td>
-                    <td>
-                        @if($practitioner->address)
-                            @if($practitioner->address->city)
-                                {{ $practitioner->address->city->name }}
+                        </td>
+                        <td>
+                            @if($practitioner->address)
+                                @if($practitioner->address->province)
+                                    {{ $practitioner->address->province }}
+                                @endif
                             @endif
-                        @endif
-                    </td>
-                    <td>
-                        @if($practitioner->address)
-                            {{ $practitioner->address->addressLine1.' '.$practitioner->address->addressLine2 }}
-                        @endif
-                    </td>
-                    <td>
-                        @if($practitioner->lastRegistration && $practitioner->lastRegistration->renewals->isNotEmpty())
-                            @if($activeRenewal = $practitioner->lastRegistration->renewals->where('renewalStatus', 'ACTIVE')->first())
-                                {{ $activeRenewal->renewalStatus }}
+                        </td>
+                        <td>
+                            @if($practitioner->address)
+                                @if($practitioner->address->city)
+                                    {{ $practitioner->address->city->name }}
+                                @endif
                             @endif
-                        @endif
-                    </td>
-                </tr>
-            @endforeach
+                        </td>
+                        <td>
+                            @if($practitioner->address)
+                                {{ $practitioner->address->addressLine1.' '.$practitioner->address->addressLine2 }}
+                            @endif
+                        </td>
+                        <td>
+                            @if($practitioner->lastRegistration && $practitioner->lastRegistration->renewals->isNotEmpty())
+                                @if($activeRenewal = $practitioner->lastRegistration->renewals->where('renewalStatus', 'ACTIVE')->first())
+                                    {{ $activeRenewal->renewalStatus }}
+                                @endif
+                            @endif
+                        </td>
+                    </tr>
+                @endforeach
+            @endif
+
 
 
             </tbody>
         </table>
 
-        {!! $practitioners->links() !!}
+        @if ($practitioners != null)
+            {!! $practitioners->links() !!}
+            <div>
+                Showing {!! $practitioners->firstItem() !!} of {!! $practitioners->lastItem() !!} out of {!! $practitioners->total() !!}
+            </div>
+        @endif
 
-        <div>
-            Showing {!! $practitioners->firstItem() !!} of {!! $practitioners->lastItem() !!} out
-            of {!! $practitioners->total() !!}
-
-        </div>
     </div>
 </div>

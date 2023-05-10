@@ -11,7 +11,6 @@ class Practitioner extends Model
 
     protected $table = 'practitioner';
 
-
     public function registration()
     {
         return $this->hasMany(Registration::class, 'practitioner_id');
@@ -30,24 +29,40 @@ class Practitioner extends Model
 
     public function scopeFilter($query, $practitionerType = null, $province = null, $city = null)
     {
-        return $query
-            ->when($practitionerType, function ($query) use ($practitionerType) {
-                return $query->whereHas('registration', function ($query) use ($practitionerType) {
-                    $query->where('practitionerType_id', $practitionerType);
-                })->with(['registration' => function ($query) {
-                    $query->latest('id')->withActiveRenewal();
-                }]);
-            })
-            ->when($province || $city, function ($query) use ($province, $city) {
-                return $query->whereHas('address', function ($query) use ($province, $city) {
-                    $query->where('province', $province);
-                    if ($city) {
-                        $query->where('city_id', $city);
-                    }
-                });
-            });
-    }
+        // filter by practitioner type
+        $query->when($practitionerType, function ($query, $practitionerType) {
+            $query->whereHas('lastRegistration', function ($query) use ($practitionerType) {
+                $query->where('practitionerType_id', $practitionerType)
+                    ->withActiveRenewal();
+            })->with(['lastRegistration' => function ($query) {
+                $query->with('practitionerType');
+            }]);
+        });
 
+        // filter by province
+        $query->when(!empty($province), function ($query) use ($province) {
+            $query->whereHas('address', function ($query) use ($province) {
+                $query->where('province', $province);
+            });
+        });
+
+        // filter by city
+        $query->when(!empty($city), function ($query) use ($city) {
+            $query->whereHas('address', function ($query) use ($city) {
+                $query->where('city_id', $city);
+            });
+        });
+
+        // filter by province && city
+        $query->when($province && $city, function ($query) use ($province, $city) {
+            $query->whereHas('address', function ($query) use ($province, $city) {
+                $query->where('province', $province)->where('city_id', $city);
+                $query->where('addressType', 'BUSINESS');
+            });
+        });
+
+        return $query;
+    }
 
     public function scopeWithActiveRenewal($query)
     {
