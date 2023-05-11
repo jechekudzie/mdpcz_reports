@@ -64,7 +64,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{url('/reports/index')}}">
                             <span data-feather="file"></span>
-                            Practitioners reports
+                            Practitioners By Province
                         </a>
                     </li>
 
@@ -72,19 +72,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="">
                             <span data-feather="file"></span>
-                            Product Types
+                            Health Premises By Province
                         </a>
                     </li>
-
-
-                    <!-- duplicate products list -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="">
-                            <span data-feather="file"></span>
-                            Products
-                        </a>
-                    </li>
-
 
                 </ul>
 

@@ -14,11 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('welcome');
-});
+});*/
 
-Route::get('/reports/index', [\App\Http\Controllers\ReportController::class, 'index']);
+Route::get('/', [\App\Http\Controllers\ReportController::class, 'index']);
 Route::get('/reports/random_update', [\App\Http\Controllers\ReportController::class, 'random_update']);
 
 Route::get('/dashboard', function () {
