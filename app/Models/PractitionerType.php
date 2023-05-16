@@ -13,6 +13,6 @@ class PractitionerType extends Model
 
     public function registrations()
     {
-        return $this->hasMany(Registration::class,'practitionerType_id');
+        return $this->hasMany(Registration::class, 'practitionerType_id');
     }
 }

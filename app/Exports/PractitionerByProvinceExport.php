@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Exports;
-
 use App\Models\Practitioner;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -20,13 +19,15 @@ class PractitionerByProvinceExport implements FromCollection, WithHeadings
 
     public function collection()
     {
-        return $this->practitioners->map(function($item) {
+        return $this->practitioners->map(function ($item) {
             return [
-                $item->firstName.' '.$item->lastName,
-                $item->lastRegistration->practitionerType->name ?? '',
-                $item->address->province ?? '',
-                $item->address->city->name ?? '',
-                ($item->address->addressLine1 ?? '') . ' ' . ($item->address->addressLine2 ?? ''),
+                $item['firstName'] . ' ' . $item['lastName'],
+                $item['practitionerType'],
+                $item['province'],
+                $item['city'],
+                $item['address'],
+                $item['email'],
+                $item['workPhoneMobile'],
             ];
         });
     }
@@ -37,6 +38,6 @@ class PractitionerByProvinceExport implements FromCollection, WithHeadings
             return $this->headers;
         }
 
-        return ['Full name', 'Profession', 'Province', 'City','Address'];
+        return ['Full Name', 'Profession', 'Province', 'City', 'Address', 'Email', 'Phone'];
     }
 }
