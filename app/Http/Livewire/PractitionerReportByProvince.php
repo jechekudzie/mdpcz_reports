@@ -96,17 +96,17 @@ class PractitionerReportByProvince extends Component
 
 
             if ($this->province && $this->city) {
-                $businessAddress = $practitioner->address->where('addressType', 'BUSINESS')->where('province', $this->province)->where('city_id', $this->city)->first();
-                $postalAddress = $practitioner->address->where('addressType', 'RESIDENTIAL')->where('province', $this->province)->where('city_id', $this->city)->first();
+                $businessAddress = $practitioner->address->where('addressType', 'RESIDENTIAL')->where('province', $this->province)->where('city_id', $this->city)->first();
+                $postalAddress = $practitioner->address->where('addressType', 'BUSINESS')->where('province', $this->province)->where('city_id', $this->city)->first();
             } elseif ($this->province) {
-                $businessAddress = $practitioner->address->where('addressType', 'BUSINESS')->where('province', $this->province)->first();
-                $postalAddress = $practitioner->address->where('addressType', 'RESIDENTIAL')->where('province', $this->province)->first();
+                $businessAddress = $practitioner->address->where('addressType', 'RESIDENTIAL')->where('province', $this->province)->first();
+                $postalAddress = $practitioner->address->where('addressType', 'BUSINESS')->where('province', $this->province)->first();
             } elseif ($this->city) {
-                $businessAddress = $practitioner->address->where('addressType', 'BUSINESS')->where('city_id', $this->city)->first();
-                $postalAddress = $practitioner->address->where('addressType', 'RESIDENTIAL')->where('city_id', $this->city)->first();
+                $businessAddress = $practitioner->address->where('addressType', 'RESIDENTIAL')->where('city_id', $this->city)->first();
+                $postalAddress = $practitioner->address->where('addressType', 'BUSINESS')->where('city_id', $this->city)->first();
             } else {
-                $businessAddress = $practitioner->address->where('addressType', 'BUSINESS')->first();
-                $postalAddress = $practitioner->address->where('addressType', 'RESIDENTIAL')->first();;
+                $businessAddress = $practitioner->address->where('addressType', 'RESIDENTIAL')->first();
+                $postalAddress = $practitioner->address->where('addressType', 'BUSINESS')->first();;
             }
 
             $address = $businessAddress ?: $postalAddress;
@@ -197,17 +197,17 @@ class PractitionerReportByProvince extends Component
             $practitionerType = $registration->practitionerType->name;
 
             if ($this->province && $this->city) {
-                $businessAddress = $practitioner->address->where('addressType', 'BUSINESS')->where('province', $this->province)->where('city_id', $this->city)->first();
-                $postalAddress = $practitioner->address->where('addressType', 'RESIDENTIAL')->where('province', $this->province)->where('city_id', $this->city)->first();
+                $businessAddress = $practitioner->address->where('addressType', 'RESIDENTIAL')->where('province', $this->province)->where('city_id', $this->city)->first();
+                $postalAddress = $practitioner->address->where('addressType', 'BUSINESS')->where('province', $this->province)->where('city_id', $this->city)->first();
             } elseif ($this->province) {
-                $businessAddress = $practitioner->address->where('addressType', 'BUSINESS')->where('province', $this->province)->first();
-                $postalAddress = $practitioner->address->where('addressType', 'RESIDENTIAL')->where('province', $this->province)->first();
+                $businessAddress = $practitioner->address->where('addressType', 'RESIDENTIAL')->where('province', $this->province)->first();
+                $postalAddress = $practitioner->address->where('addressType', 'BUSINESS')->where('province', $this->province)->first();
             } elseif ($this->city) {
-                $businessAddress = $practitioner->address->where('addressType', 'BUSINESS')->where('city_id', $this->city)->first();
-                $postalAddress = $practitioner->address->where('addressType', 'RESIDENTIAL')->where('city_id', $this->city)->first();
+                $businessAddress = $practitioner->address->where('addressType', 'RESIDENTIAL')->where('city_id', $this->city)->first();
+                $postalAddress = $practitioner->address->where('addressType', 'BUSINESS')->where('city_id', $this->city)->first();
             } else {
-                $businessAddress = $practitioner->address->where('addressType', 'BUSINESS')->first();
-                $postalAddress = $practitioner->address->where('addressType', 'RESIDENTIAL')->first();
+                $businessAddress = $practitioner->address->where('addressType', 'RESIDENTIAL')->first();
+                $postalAddress = $practitioner->address->where('addressType', 'BUSINESS')->first();
             }
             $address = $businessAddress ?: $postalAddress;
 
